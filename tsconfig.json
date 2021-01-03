@@ -21,7 +21,7 @@
       "@ui/*": ["ui/*"],
       "@core/*": ["core/*"],
       "@pages/*": ["pages/*"],
-      "@types/*": ["types/*"],
+      "@types": ["types"],
       "@utils/*": ["utils/*"]
     }
   },

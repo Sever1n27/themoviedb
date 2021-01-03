@@ -32,6 +32,7 @@ export function Home() {
   return (
     <Container>
       {isLoading && <div>isLoading</div>}
+      <Title>Latest films</Title>
       <CardsWrapper>
         {latestFilms &&
           latestFilms.map((movie: any) => (
