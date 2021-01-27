@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { Latest, Movie } from "@pages";
+import { Authorization } from "@features";
 import { Header } from "@ui";
 
 export function App() {
@@ -19,6 +20,9 @@ export function App() {
         </Route>
         <Route path="/movie/:id/">
           <Movie />
+        </Route>
+        <Route path="/auth/">
+          <Authorization />
         </Route>
       </Switch>
     </>
