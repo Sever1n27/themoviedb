@@ -18,7 +18,7 @@
     "paths": {
       "@constants/*": ["constants/*"],
       "@features": ["features"],
-      "@ui/*": ["ui/*"],
+      "@ui": ["ui"],
       "@core/*": ["core/*"],
       "@pages/*": ["pages/*"],
       "@types": ["types"],

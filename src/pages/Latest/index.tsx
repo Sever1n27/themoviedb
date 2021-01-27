@@ -1,15 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 import { useStore } from "effector-react";
-import "@core/homepage";
+import "./model";
 import {
   changePage,
   $latestFilms,
   $currentPage,
   $isLoading,
   $totalPages,
-} from "@core/homepage";
-import { Pagination, MovieCard } from "@features";
+} from "./model";
+import { Pagination, Preloader } from "@features";
+import { MovieCard } from "@ui";
 
 const Title = styled.h1``;
 
@@ -24,15 +26,26 @@ const CardsWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export function Home() {
+export function Latest() {
   const latestFilms = useStore($latestFilms);
   const currentPage = useStore($currentPage);
   const totalPages = useStore($totalPages);
   const isLoading = useStore($isLoading);
+  const { page }: { page: any } = useParams();
+
+  React.useEffect(() => {
+    changePage(page);
+  }, [page]);
+
   return (
     <Container>
-      {isLoading && <div>isLoading</div>}
+      {isLoading && <Preloader />}
       <Title>Latest films</Title>
+      <Pagination
+        loading={isLoading}
+        current={currentPage}
+        total={totalPages}
+      />
       <CardsWrapper>
         {latestFilms &&
           latestFilms.map((movie: any) => (
@@ -40,7 +53,6 @@ export function Home() {
           ))}
       </CardsWrapper>
       <Pagination
-        onClick={changePage}
         loading={isLoading}
         current={currentPage}
         total={totalPages}

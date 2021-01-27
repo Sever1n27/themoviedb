@@ -10,6 +10,9 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
     "effector": "^21.5.0",
     "effector-react": "^21.0.6",
     "razzle-plugin-typescript": "^3.3.7",

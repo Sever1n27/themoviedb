@@ -2,18 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useStore } from "effector-react";
-import {
-  $isLoading,
-  $movieDetails,
-  fetchMovieDetails,
-  reset,
-} from "@core/moviepage";
+import { Preloader } from "@features";
+import { $isLoading, $movieDetails, fetchMovieDetails, reset } from "./model";
 
 const Title = styled.h1``;
 
 const Container = styled.div`
   max-width: 1100px;
   margin: 0 auto;
+`;
+
+const Poster = styled.img`
+  display: block;
 `;
 
 export function Movie() {
@@ -24,10 +24,15 @@ export function Movie() {
   }, [id]);
   const movieDetails = useStore($movieDetails);
   const isLoading = useStore($isLoading);
+  console.log(movieDetails);
   return (
     <Container>
-      {isLoading && <div>isLoading</div>}
-      {movieDetails && <Title>{movieDetails?.title}</Title>}
+      {isLoading && <Preloader />}
+      {movieDetails && (
+        <div>
+          <Title>{movieDetails?.title}</Title>
+        </div>
+      )}
     </Container>
   );
 }
