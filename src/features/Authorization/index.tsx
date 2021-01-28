@@ -1,25 +1,7 @@
 import React from "react";
 import { useStore } from "effector-react";
-import { makeStyles } from "@material-ui/core/styles";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import { Stepper, Step, StepLabel } from "@material-ui/core";
 import { $token, getSessionId, $sessionId } from "@core/models/auth";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  button: {
-    marginRight: theme.spacing(1),
-  },
-  instructions: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-}));
 
 function getSteps() {
   return ["Разрешить доступ на moviedb", "Авторизоваться"];

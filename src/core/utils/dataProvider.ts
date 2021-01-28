@@ -10,7 +10,7 @@ export async function dataProvider(url: string, method = "GET", params?: any) {
         urlString.searchParams.append(key, params[key])
       );
     }
-    if (method === "POST") {
+    if (method === "POST" || method === "DELETE") {
       body = JSON.stringify(params);
     }
   }

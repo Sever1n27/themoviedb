@@ -1,15 +1,12 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-
+import { Link as RouterLink } from "react-router-dom";
+import { AppBar, Toolbar, Link, makeStyles, Button } from "@material-ui/core";
+import { useStore } from "effector-react";
+import { $authorized, logout } from "@core/models/auth";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    justifyContent: "space-between",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -21,23 +18,25 @@ const useStyles = makeStyles((theme) => ({
 
 export function Header() {
   const classes = useStyles();
-
+  const authorized = useStore($authorized);
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
+        <Toolbar className={classes.root}>
+          <Link component={RouterLink} to="/latest/1/" color="inherit">
+            Latest
+          </Link>
+          <div>
+            {authorized ? (
+              <Button color="inherit" onClick={() => logout()}>
+                LOGOUT
+              </Button>
+            ) : (
+              <Link component={RouterLink} to="/auth" color="inherit">
+                LOGIN
+              </Link>
+            )}
+          </div>
         </Toolbar>
       </AppBar>
     </div>
