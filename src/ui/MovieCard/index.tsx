@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useStore } from "effector-react";
 import { Movie } from "@types";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
+import { makeStyles, Card, Button, ButtonGroup } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
+import { $authorized } from "@core/models/auth";
+import { addToFavorites, addToWatchlist } from "@core/models/account";
 
 const StyledLink = styled(Link)`
   display: flex;
@@ -13,7 +15,6 @@ const StyledLink = styled(Link)`
   padding: 20px 20% 20px 20px;
   color: black;
   text-decoration: none;
-  background: #b9daff;
 `;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,6 +54,8 @@ type Props = {
 export function MovieCard(props: Props) {
   const { movie } = props;
   const classes = useStyles();
+  const authorized = useStore($authorized);
+  console.log(authorized);
   return (
     <Card className={classes.root}>
       <StyledLink to={`/movie/${movie.id}`}>
@@ -73,6 +76,16 @@ export function MovieCard(props: Props) {
           </Ratings>
         </Description>
       </StyledLink>
+      {authorized && (
+        <ButtonGroup>
+          <Button onClick={() => addToFavorites(movie?.id)}>
+            add to favorites
+          </Button>
+          <Button onClick={() => addToWatchlist(movie?.id)}>
+            add to watchlist
+          </Button>
+        </ButtonGroup>
+      )}
     </Card>
   );
 }

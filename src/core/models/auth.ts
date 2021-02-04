@@ -4,16 +4,17 @@ import {
   createStore,
   forward,
   sample,
+  combine,
+  restore,
 } from "effector";
 import { dataProvider } from "@core/utils/dataProvider";
-import { getCookie } from "@core/utils/getCookie";
-import { deleteCookie } from "@core/utils/deleteCookie";
+import { getCookie, deleteCookie, setCookie } from "@core/utils/cookies";
 
 const fetchRequestToken = createEffect(async () => {
   return dataProvider("/authentication/token/new");
 });
 
-const fetchSessionId = createEffect(async (token: string) => {
+export const fetchSessionId = createEffect(async (token: string) => {
   return dataProvider("/authentication/session/new", "POST", {
     request_token: token,
   });
@@ -43,7 +44,7 @@ export const $tokenData = createStore<any>(null)
 export const $token = $tokenData.map((data) => data?.request_token);
 export const $sessionData = createStore(null)
   .on(fetchSessionId.doneData, (_, data) => {
-    document.cookie = `sessionId=${data.session_id}`;
+    setCookie("sessionId", data.session_id, null);
     return data;
   })
   .reset(reset);
@@ -55,8 +56,19 @@ export const $sessionId = $sessionData
     deleteCookie("sessionId");
     return "";
   });
+const fetchAccountDetails = createEffect(async (sessionId: string) => {
+  return dataProvider("/account", "GET", {
+    session_id: sessionId,
+  });
+});
+export const $accountDetails = restore(fetchAccountDetails.doneData, null);
+export const $accountId = $accountDetails.map((data) => data?.id);
 
-export const $authorized = $sessionId.map((id) => (id ? true : false));
+export const $authorized = combine(
+  $sessionId,
+  $accountId,
+  ($sessionId, $accountId) => !!$sessionId && !!$accountId
+);
 
 forward({
   from: restoreSessionIdFromCookies.fail,
@@ -82,6 +94,12 @@ sample({
 forward({
   from: logoutEffect.done,
   to: getRequestToken,
+});
+
+sample({
+  source: $sessionId,
+  clock: [fetchSessionId.done, restoreSessionIdFromCookies.done],
+  target: fetchAccountDetails,
 });
 
 restoreSessionIdFromCookies();
